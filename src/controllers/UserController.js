@@ -1,12 +1,9 @@
-
 const User = require("../models/User");
 var bcrypt = require("bcrypt");
 
 var PasswordToken = require("../models/PasswordToken");
 
 const mail = require('../config/mail');
-
-
 
 
 class UserController {
