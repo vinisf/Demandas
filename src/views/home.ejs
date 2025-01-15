@@ -21,8 +21,10 @@
             <thead>
                 <tr>
                     <th scope="col">id</th>
-                    <th scope="col">nome</th>
-                    <th scope="col">ações</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Status</th>
+
+                    <th scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +36,10 @@
                         <td>
                             <%= demanda.nome %>
                         </td>
+                        <td>
+                            <% const status = statusLabels[demanda.status]; %>
+                            <span class="badge <%= status.class %>"><%= status.text %></span>
+                        </td>
 
                         <td>
                             <a href="/edit/<%= demanda.id %>" class="btn btn-warning">Editar</a>
@@ -43,7 +49,7 @@
                                 <input type="hidden" name="id" value="<%= demanda.id %>">
                                 <button class="btn btn-danger">Deletar</button>
                             </form>
-                            <% if(demanda.file){ %>  <a href="<%= demanda.file %>" class="btn btn-success">ver upload</a> <% } %>
+                            <% if(demanda.file){ %>  <a href="<%= demanda.file %>" class="btn btn-success" target=”_blank”>ver upload</a> <% } %>
 
                         </td>
 

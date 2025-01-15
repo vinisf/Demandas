@@ -1,7 +1,6 @@
 const knex = require('../config/database');
 var bcrypt = require("bcrypt");
 
-
 class User {
     async getAll() {
         try {
@@ -92,11 +91,6 @@ class User {
         await PasswordToken.setUsed(token);
     }
     
-
-
-
 }
-
-
 
 module.exports = new User();

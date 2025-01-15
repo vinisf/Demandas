@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const DemandaController = require('../controllers/DemandaController')
 const UserController = require('../controllers/UserController')
-const InscricaoController = require('../controllers/InscricaoController')
 const auth = require('../middlewares/auth')
 
 var multer = require('multer')
@@ -10,12 +9,13 @@ var storage = require('../config/multer')
 
 const upload = multer({ storage })
 
-//Rotas inscricao
-router.get("/inscricao", InscricaoController.create)
-router.post('/inscricao/save', InscricaoController.save)
+//Rotas demanda responsavel
+router.get('/demandas/:id', auth,DemandaController.viewDemanda);
+router.post('/demandas/:id/ingressar', DemandaController.ingressarDemanda);
+router.post('/demandas/:id/finalizar', DemandaController.finalizarDemanda);
 
 
-//Rotas demanda
+//Rotas demanda admin
 router.get('/',auth, DemandaController.index)
 router.get('/create',auth, DemandaController.create)
 router.post('/save',auth, upload.single('file'), DemandaController.save)

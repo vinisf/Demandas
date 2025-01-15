@@ -3,9 +3,6 @@ var router = require('./routes/routes')
 var bodyParser = require('body-parser')
 const session = require("express-session");
 
-
-
-
 var app = express();
 
 // Sessions

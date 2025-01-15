@@ -1,0 +1,24 @@
+<div class="container">
+    <h1>Detalhes da Demanda</h1>
+    <p><strong>ID:</strong> <%= demanda.id %></p>
+    <p><strong>Titulo:</strong> <%= demanda.nome %></p>
+    <p><strong>Descrição:</strong> <%= demanda.descricao %></p>
+
+    <p><strong>Status:</strong> 
+        <% const status = statusLabels[demanda.status]; %>
+        <span class="badge <%= status.class %>"><%= status.text %></span>
+
+    </p>
+    <p><strong>Upload:</strong> <% if(demanda.file){ %>  <a href="/<%= demanda.file %>" class="btn btn-success" target=”_blank”>ver upload</a> <% } %></p>
+
+
+    <% if (demanda.status === 1) { %>
+        <form method="POST" action="/demandas/<%= demanda.id %>/ingressar">
+            <button class="btn btn-primary">Ingressar na Demanda</button>
+        </form>
+    <% } else if (demanda.status === 2) { %>
+        <form method="POST" action="/demandas/<%= demanda.id %>/finalizar">
+            <button class="btn btn-success">Finalizar Demanda</button>
+        </form>
+    <% } %>
+</div>
