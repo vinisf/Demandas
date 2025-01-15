@@ -5,63 +5,66 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cadastro</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 
-<body>
-    <br>
-    <div class="container">
-        <hr>
-        <div class="card">
-            <div class="card-header">
-                <h2>Cadastro </h2>
+<body class="bg-light">
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="card shadow-lg" style="width: 100%; max-width: 500px;">
+            <div class="card-header bg-primary text-white text-center">
+                <h2 class="mb-0">Cadastro de Usuário</h2>
             </div>
             <div class="card-body">
-                <form method="POST" enctype="multipart/form-data" <% if (user) { %> action="/user/update/<%= user.id %>"
-                        <% }else{ %> action="/user/save/" <%} %> >
-                                
-                                <div class="mb-3">
-                                    <label for="">E-mail</label>
+                <form method="POST" enctype="multipart/form-data" 
+                      <% if (user) { %> action="/user/update/<%= user.id %>" <% } else { %> action="/user/save/" <% } %> >
+                    
+                    <!-- Campo E-mail -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input class="form-control" name="email" type="email" id="email" placeholder="email@exemplo.com" required>
+                    </div>
 
-                                    <input class="form-control" name="email" type="email"
-                                        placeholder="email@exemplo.com">
+                    <!-- Campo Senha -->
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Senha</label>
+                        <input class="form-control" name="senha" type="password" id="senha" placeholder="******" onchange="confereSenha()" required>
+                    </div>
 
-                                </div>
-                                <div class="mb-3">
-                                    <label for="">Senha</label>
+                    <!-- Campo Repetir Senha -->
+                    <div class="mb-3">
+                        <label for="senha2" class="form-label">Repetir Senha</label>
+                        <input class="form-control" name="senha2" type="password" id="senha2" placeholder="******" onchange="confereSenha()" required>
+                    </div>
 
-                                    <input class="form-control" name="senha" type="password" placeholder="******" onchange="confereSenha()" required>
+                    <!-- Input Hidden para id (se existir) -->
+                    <% if (user) { %> 
+                        <input type="hidden" name="id" value="<%= user.id %>">
+                    <% } %>
 
-                                </div>
-                                <div class="mb-3">
-                                    <label for="">Repetir senha</label>
-                                    <input class="form-control" name="senha2" type="password" placeholder="******" onchange="confereSenha()" required>
-
-                                </div>
-
-                                <% if (user) { %> <input type="hidden" name="id"  value="<%= user.id %>">
-                                    <% } %>
-                                    <button type="submit" class="btn btn-primary pull-right botao_reset_senha">Enviar</button>
-                                </form>
+                    <!-- Botão Enviar -->
+                    <button type="submit" class="btn btn-success w-100">Cadastrar</button>
+                </form>
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <!-- Função de Validação de Senha -->
     <script>
         function confereSenha() {
-            senha = document.querySelector('input[name=senha]');
-            senha2 = document.querySelector('input[name=senha2]');
+            const senha = document.querySelector('input[name=senha]');
+            const senha2 = document.querySelector('input[name=senha2]');
             if (senha.value === senha2.value) {
-                senha2.setCustomValidity('')
+                senha2.setCustomValidity('');
             } else {
                 senha2.setCustomValidity('As senhas não conferem');
             }
         }
-
-    </script>
     </script>
 </body>
 

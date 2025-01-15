@@ -5,11 +5,15 @@ const statusLabels = require("../combo-box-data/status");
 class DemandaController {
   async index(req, res) {
     var id = req.session.user.id;
-
     var demandas = await Demanda.findByUser(id);
 
-    res.render("home", { demandas: demandas, statusLabels: statusLabels });
-  }
+    res.render("home", { 
+        demandas: demandas, 
+        statusLabels: statusLabels,
+        messages: req.flash() // Passa as mensagens flash para a view
+    });
+}
+
 
   async create(req, res) {
     var demanda = { file: undefined, id: undefined };
@@ -21,9 +25,17 @@ class DemandaController {
     var demanda = req.body;
     demanda.file = req.file ? req.file.path : undefined;
     demanda.iduser = req.session.user.id;
-    await Demanda.create(demanda);
-    res.redirect("/");
-  }
+    
+    try {
+        await Demanda.create(demanda);
+        req.flash('success', 'Demanda criada com sucesso!');
+        res.redirect("/");
+    } catch (error) {
+        req.flash('error', 'Erro ao criar demanda!');
+        res.redirect("/create");
+    }
+}
+
 
   async edit(req, res) {
     var demanda = await Demanda.findById(req.params.id);

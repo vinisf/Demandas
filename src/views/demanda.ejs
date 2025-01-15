@@ -1,24 +1,65 @@
-<div class="container">
-    <h1>Detalhes da Demanda</h1>
-    <p><strong>ID:</strong> <%= demanda.id %></p>
-    <p><strong>Titulo:</strong> <%= demanda.nome %></p>
-    <p><strong>Descrição:</strong> <%= demanda.descricao %></p>
+<!DOCTYPE html>
+<html lang="en">
 
-    <p><strong>Status:</strong> 
-        <% const status = statusLabels[demanda.status]; %>
-        <span class="badge <%= status.class %>"><%= status.text %></span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Demanda</title>
 
-    </p>
-    <p><strong>Upload:</strong> <% if(demanda.file){ %>  <a href="/<%= demanda.file %>" class="btn btn-success" target=”_blank”>ver upload</a> <% } %></p>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
 
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h4">Detalhes da Demanda</h1>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>ID:</strong> <%= demanda.id %></p>
+                        <p><strong>Título:</strong> <%= demanda.nome %></p>
+                        <p><strong>Descrição:</strong> <%= demanda.descricao %></p>
 
-    <% if (demanda.status === 1) { %>
-        <form method="POST" action="/demandas/<%= demanda.id %>/ingressar">
-            <button class="btn btn-primary">Ingressar na Demanda</button>
-        </form>
-    <% } else if (demanda.status === 2) { %>
-        <form method="POST" action="/demandas/<%= demanda.id %>/finalizar">
-            <button class="btn btn-success">Finalizar Demanda</button>
-        </form>
-    <% } %>
-</div>
+                        <p>
+                            <strong>Status:</strong>
+                            <% const status = statusLabels[demanda.status]; %>
+                            <span class="badge <%= status.class %>"><%= status.text %></span>
+                        </p>
+
+                        <p>
+                            <strong>Upload:</strong>
+                            <% if (demanda.file) { %>  
+                                <a href="/<%= demanda.file %>" class="btn btn-success btn-sm" target="_blank">Ver Upload</a> 
+                            <% } else { %>
+                                <span class="text-muted">Nenhum arquivo anexado</span>
+                            <% } %>
+                        </p>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <% if (demanda.status === 1) { %>
+                            <form method="POST" action="/demandas/<%= demanda.id %>/ingressar" class="d-inline">
+                                <button class="btn btn-primary">Ingressar na Demanda</button>
+                            </form>
+                        <% } else if (demanda.status === 2) { %>
+                            <form method="POST" action="/demandas/<%= demanda.id %>/finalizar" class="d-inline">
+                                <button class="btn btn-success">Finalizar Demanda</button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
