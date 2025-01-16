@@ -1,79 +1,65 @@
-<!doctype html>
-<html lang="en">
+<%- include('partials/header.ejs') %>
+    <%- include ('partials/navbar.ejs') %>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lista de Demandas</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-</head>
+        <!-- Conteúdo específico da página -->
+        <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Lista de Demandas</h1>
+                <a class="btn btn-success" href="/create">Criar Nova Demanda</a>
+            </div>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Sistema de Demandas</a>
-            <button class="btn btn-warning" onclick="window.location.href='/logout'">Logout</button>
-        </div>
-    </nav>
-
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Lista de Demandas</h1>
-            <a class="btn btn-success" href="/create">Criar Nova Demanda</a>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% demandas.forEach(demanda => { %>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
                         <tr>
-                            <th scope="row"><%= demanda.id %></th>
-                            <td><%= demanda.nome %></td>
-                            <td>
-                                <% const status = statusLabels[demanda.status]; %>
-                                <span class="badge <%= status.class %>"><%= status.text %></span>
-                            </td>
-                            <td>
-                                <div class="d-flex flex-wrap gap-2">
-                                    <a href="/edit/<%= demanda.id %>" class="btn btn-warning btn-sm">Editar</a>
-                                    <form method="POST" action="/delete" onsubmit="confirmarDelecao(event, this)">
-                                        <input type="hidden" name="id" value="<%= demanda.id %>">
-                                        <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
-                                    </form>
-                                    <% if (demanda.file) { %>
-                                        <a href="<%= demanda.file %>" class="btn btn-success btn-sm" target="_blank">Ver Upload</a>
-                                    <% } %>
-                                </div>
-                            </td>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Ações</th>
                         </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% demandas.forEach(demanda=> { %>
+                            <tr>
+                                <th scope="row">
+                                    <%= demanda.id %>
+                                </th>
+                                <td>
+                                    <%= demanda.nome %>
+                                </td>
+                                <td>
+                                    <span class="badge <%= statusLabels[demanda.status].class %>">
+                                        <%= statusLabels[demanda.status].text %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a href="/edit/<%= demanda.id %>" class="btn btn-warning btn-sm">Editar</a>
+                                        <form method="POST" action="/delete" onsubmit="confirmarDelecao(event, this)">
+                                            <input type="hidden" name="id" value="<%= demanda.id %>">
+                                            <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+                                        </form>
+                                        <% if (demanda.file) { %>
+                                            <a href="<%= demanda.file %>" class="btn btn-success btn-sm"
+                                                target="_blank">Ver Upload</a>
+                                            <% } %>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <script>
-        function confirmarDelecao(event, form) {
-            event.preventDefault();
-            const decision = confirm("Você quer deletar esta demanda?");
-            if (decision) {
-                form.submit();
-            }
-        }
-    </script>
-</body>
+        <%- include('partials/footer.ejs') %>
 
-</html>
+            <script>
+                function confirmarDelecao(event, form) {
+                    event.preventDefault();
+                    const decision = confirm("Você quer deletar esta demanda?");
+                    if (decision) {
+                        form.submit();
+                    }
+                }
+            </script>

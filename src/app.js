@@ -1,18 +1,11 @@
 var express = require('express')
 var router = require('./routes/routes')
 var bodyParser = require('body-parser')
-const session = require("express-session");
+
 const flash = require('connect-flash');
+const session = require("express-session");
 
 var app = express();
-
-
-// Configuração do express-session
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true
-}));
 
 // Configuração do connect-flash
 app.use(flash());

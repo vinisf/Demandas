@@ -7,35 +7,36 @@ class DemandaController {
     var id = req.session.user.id;
     var demandas = await Demanda.findByUser(id);
 
-    res.render("home", { 
-        demandas: demandas, 
-        statusLabels: statusLabels,
-        messages: req.flash() // Passa as mensagens flash para a view
+    res.render("home", {
+      demandas: demandas,
+      statusLabels: statusLabels,
+      messages: {
+        success: req.flash("success"), // As mensagens de sucesso são passadas como arrays
+        error: req.flash("error"), // O mesmo para as mensagens de erro
+      },
     });
-}
-
+  }
 
   async create(req, res) {
     var demanda = { file: undefined, id: undefined };
 
-    res.render("demanda/create", { demanda });
+    res.render("demanda/create", { demanda, messages: req.flash() });
   }
 
   async save(req, res) {
     var demanda = req.body;
     demanda.file = req.file ? req.file.path : undefined;
     demanda.iduser = req.session.user.id;
-    
-    try {
-        await Demanda.create(demanda);
-        req.flash('success', 'Demanda criada com sucesso!');
-        res.redirect("/");
-    } catch (error) {
-        req.flash('error', 'Erro ao criar demanda!');
-        res.redirect("/create");
-    }
-}
 
+    try {
+      await Demanda.create(demanda);
+      req.flash("success", "Demanda criada com sucesso!");
+      res.redirect("/");
+    } catch (error) {
+      req.flash("error", "Erro ao criar demanda!");
+      res.redirect("/create");
+    }
+  }
 
   async edit(req, res) {
     var demanda = await Demanda.findById(req.params.id);
@@ -96,13 +97,13 @@ class DemandaController {
       return res.status(404).send("Demanda não encontrada");
     }
 
-    res.render("demanda", { demanda, statusLabels: statusLabels });
+    res.render("demanda/list", { demanda, statusLabels: statusLabels });
   }
 
   // Ingressar na demanda
   async ingressarDemanda(req, res) {
     const id = req.params.id;
-    const usuarioId = req.session.user.id; 
+    const usuarioId = req.session.user.id;
 
     const demanda = await Demanda.findById(id);
     if (!demanda) {
@@ -126,6 +127,18 @@ class DemandaController {
     // Atualizar o status para "Concluído"
     await Demanda.updateStatus(id, 3); // 3 = Concluído
     res.redirect(`/demandas/${id}`);
+  }
+  async visualizarDemandas(req, res) {
+    const idUser = req.session.user.id;
+    const demandas = await Demanda.findByUser(idUser);
+    res.render("demanda/view-only", {
+      demandas,
+      statusLabels: statusLabels,
+      messages: {
+        success: req.flash("success"), // As mensagens de sucesso são passadas como arrays
+        error: req.flash("error"), // O mesmo para as mensagens de erro
+      },
+    });
   }
 }
 

@@ -16,6 +16,8 @@ router.post('/demandas/:id/finalizar', DemandaController.finalizarDemanda);
 
 
 //Rotas demanda admin
+router.get('/dev',auth, DemandaController.visualizarDemandas)
+
 router.get('/',auth, DemandaController.index)
 router.get('/create',auth, DemandaController.create)
 router.post('/save',auth, upload.single('file'), DemandaController.save)
