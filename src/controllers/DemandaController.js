@@ -20,7 +20,10 @@ class DemandaController {
   async create(req, res) {
     var demanda = { file: undefined, id: undefined };
 
-    res.render("demanda/create", { demanda, messages: req.flash() });
+    res.render("demanda/create", { demanda,  messages: {
+      success: req.flash("success"), // As mensagens de sucesso são passadas como arrays
+      error: req.flash("error"), // O mesmo para as mensagens de erro
+    } });
   }
 
   async save(req, res) {
@@ -41,7 +44,10 @@ class DemandaController {
   async edit(req, res) {
     var demanda = await Demanda.findById(req.params.id);
 
-    res.render("demanda/create", { demanda });
+    res.render("demanda/create", { demanda,   messages: {
+      success: req.flash("success"), // As mensagens de sucesso são passadas como arrays
+      error: req.flash("error"), // O mesmo para as mensagens de erro
+    } });
   }
   async update(req, res) {
     var demanda = req.body;
@@ -50,6 +56,7 @@ class DemandaController {
     }
 
     await Demanda.update(demanda);
+    req.flash("success", "Demanda Atualizada com sucesso!");
 
     res.redirect("/");
   }
@@ -67,7 +74,7 @@ class DemandaController {
     }
 
     await Demanda.delete(id);
-
+    req.flash("success", "Demanda Deletada com sucesso!");
     res.redirect("/");
   }
 
@@ -78,8 +85,8 @@ class DemandaController {
       await fs.unlink(demanda.file, async (error) => {
         if (!error) {
           demanda.file = null;
-          console.log(demanda);
           await Demanda.update(demanda);
+          req.flash("success", "Upload Deletado com sucesso!");
           res.redirect("/edit/" + demanda.id);
         } else {
           return error;
@@ -126,6 +133,7 @@ class DemandaController {
 
     // Atualizar o status para "Concluído"
     await Demanda.updateStatus(id, 3); // 3 = Concluído
+    req.flash("success", "Demanda finalizada com sucesso!");
     res.redirect(`/demandas/${id}`);
   }
   async visualizarDemandas(req, res) {
