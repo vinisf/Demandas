@@ -3,7 +3,7 @@ var bcrypt = require("bcrypt");
 
 var PasswordToken = require("../models/PasswordToken");
 
-const mail = require("../config/mail");
+const transporter = require("../config/mail");
 
 class UserController {
   async teste(req, res) {
@@ -66,9 +66,9 @@ class UserController {
           email: user.email,
         };
         if (user.role == 0) {
-          res.redirect("/dev");
+          res.redirect("/");
         } else {
-          res.redirect("/dev");
+          res.redirect("/");
         }
       } else {
         res.redirect("user/login");
@@ -84,24 +84,22 @@ class UserController {
     var email = req.body.email;
     var result = await PasswordToken.create(email);
     if (result.status) {
-      await mail
-        .sendMail({
-          from: "suporte.secti.ma@gmail.com",
-          to: email,
-          text: "teste texto",
-          subject: "Recuperar Senha",
-          html:
-            "Foi solicitado a recuperação de senha para este email.<br><strong><a href='http://localhost:3001/user/changePassword/" +
-            result.token +
-            "'> clique aqui para recuperar a senha <a/></strong>",
-        })
-        .catch((err) => {
-          console.log(err);
+      // Envia o e-mail
+      try {
+        await transporter.sendMail({
+          from: "suporte.secti.ma@gmail.com", // Remetente
+          to: email, // Destinatário
+          subject: "Recuperar Senha", // Assunto
+          html: `Foi solicitado a recuperação de senha para este email.<br><strong><a href='http://localhost:3001/user/changePassword/${result.token}'>Clique aqui para recuperar a senha</a></strong>`,
         });
-      res.send("Tudo OK!");
+
+        res.send("Tudo OK! Verifique seu e-mail para recuperar a senha.");
+      } catch (err) {
+        console.error("Erro ao enviar e-mail:", err);
+        res.status(500).send("Erro ao enviar e-mail.");
+      }
     } else {
-      res.status(406);
-      res.send(result.err);
+      res.status(406).send(result.err);
     }
   }
   async changePassword(req, res) {

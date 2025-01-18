@@ -20,9 +20,9 @@ router.get('/dev',auth, DemandaController.visualizarDemandas)
 
 router.get('/',auth, DemandaController.index)
 router.get('/create',auth, DemandaController.create)
-router.post('/save',auth, upload.single('file'), DemandaController.save)
+router.post('/save', auth, upload.array('files', 5), DemandaController.save);
 router.get('/edit/:id', auth,  DemandaController.edit)
-router.post('/update/:id',auth, upload.single('file'), DemandaController.update)
+router.post('/update/:id', auth, upload.array('files', 5), DemandaController.update);
 router.post('/delete', DemandaController.delete)
 router.get('/deleteUpload/:id',auth,  DemandaController.deleteUpload)
 

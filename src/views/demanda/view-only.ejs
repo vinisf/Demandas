@@ -8,45 +8,69 @@
 
                     <!-- Conteúdo Principal -->
                     <div class="col-md-10 offset-md-2 p-4" id="main-content">
-                        <div class="container mt-4">
-                            <div class="table-responsive">
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col-md-8 offset-md-2">
+                                    <div class="card">
+                                        <div class="card-header bg-primary text-white">
+                                            <h1 class="h4">Detalhes da Demanda</h1>
+                                        </div>
+                                        <div class="card-body">
+                                            <p><strong>ID:</strong>
+                                                <%= demanda.id %>
+                                            </p>
+                                            <p><strong>Título:</strong>
+                                                <%= demanda.nome %>
+                                            </p>
+                                            <p><strong>Descrição:</strong>
+                                                <%= demanda.descricao %>
+                                            </p>
 
-                                <table id="tabela-demandas" class="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Nome</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% demandas.forEach(demanda=> { %>
-                                            <tr>
-                                                <th scope="row">
-                                                    <%= demanda.id %>
-                                                </th>
-                                                <td>
-                                                    <%= demanda.nome %>
-                                                </td>
-                                                <td>
-                                                    <% const status=statusLabels[demanda.status]; %>
-                                                        <span class="badge <%= status.class %>">
-                                                            <%= status.text %>
-                                                        </span>
-                                                </td>
-                                                <td>
-                                                    <a href="/demandas/<%= demanda.id %>"
-                                                        class="btn btn-info btn-sm">Visualizar</a>
-                                                </td>
-                                            </tr>
-                                            <% }) %>
-                                    </tbody>
-                                </table>
+                                            <p>
+                                                <strong>Status:</strong>
+                                                <% const status=statusLabels[demanda.status]; %>
+                                                    <span class="badge <%= status.class %>">
+                                                        <%= status.text %>
+                                                    </span>
+                                            </p>
+
+                                            <p>
+                                                <strong>Uploads:</strong>
+                                                <% if (files && files.length> 0) { %>
+                                                    <ul>
+                                                        <% files.forEach(function(file) { %>
+                                                            <li>
+                                                                <a href="/<%= file.path %>" target="_blank">
+                                                                    <%= file.name %>
+                                                                </a>
+                                                            </li>
+                                                            <% }); %>
+                                                    </ul>
+                                                    <% } else { %>
+                                                        <span class="text-muted">Nenhum arquivo anexado</span>
+                                                        <% } %>
+                                            </p>
+                                        </div>
+
+                                        <div class="card-footer text-center">
+                                            <% if (demanda.status===1) { %>
+                                                <form method="POST" action="/demandas/<%= demanda.id %>/ingressar"
+                                                    class="d-inline">
+                                                    <button class="btn btn-primary">Ingressar na Demanda</button>
+                                                </form>
+                                                <% } else if (demanda.status===2) { %>
+                                                    <form method="POST" action="/demandas/<%= demanda.id %>/finalizar"
+                                                        class="d-inline">
+                                                        <button class="btn btn-success">Finalizar Demanda</button>
+                                                    </form>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
             </div>
         </div>
-
+        
         <%- include('../partials/footer.ejs') %>

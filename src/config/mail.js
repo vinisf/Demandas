@@ -1,14 +1,12 @@
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer");
 
-var transporter = nodemailer.createTransport(
-    {
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth:{
-            user: "suporte.secti.ma@gmail.com",
-            pass: "dejqmgsxojubepbz"
-        }
-    });
-
-    module.exports = transporter
+// Looking to send emails in production? Check out our Email API/SMTP product!
+var transporter = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "3f24695a59053a",
+    pass: "0655d5d8801a60",
+  },
+});
+module.exports = transporter;

@@ -1,50 +1,68 @@
 <%- include('../partials/header.ejs') %>
-    <%- include ('../partials/navbar.ejs') %>
+<%- include ('../partials/navbar.ejs') %>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Incluir Sidebar Externo -->
+    <%- include('../partials/sidebar.ejs') %>
 
-    <div class="container mt-5">
+    <!-- Conteúdo Principal -->
+    <div class="col-md-10 offset-md-2 p-4" id="main-content">
+      <div class="container mt-5">
         <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h2 class="h4 mb-0">Cadastro de Demandas</h2>
-            </div>
-            <div class="card-body">
-                <form method="POST" enctype="multipart/form-data" 
-                      <% if (demanda && demanda.id) { %> 
-                          action="/update/<%= demanda.id %>" 
-                      <% } else { %> 
-                          action="/save/" 
-                      <% } %> >
-                    
-                    <!-- Nome da Demanda -->
-                    <div class="mb-3">
-                        <label for="nome" class="form-label">Nome da Demanda</label>
-                        <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite a demanda..."
-                            <% if (demanda) { %> value="<%= demanda.nome %>" <% } %> required>
-                    </div>
-                    
-                    <!-- Upload de Arquivo -->
-                    <div class="mb-3">
-                        <label for="file" class="form-label">Upload de Arquivo</label>
-                        <input type="file" class="form-control" id="file" name="file">
-                        <% if (demanda && demanda.file) { %>
-                            <div class="mt-2">
-                                <a href="/<%= demanda.file %>" target="_blank" class="btn btn-outline-success btn-sm">Ver Upload</a>
-                                <a href="/deleteUpload/<%= demanda.id %>" class="btn btn-outline-danger btn-sm">Excluir</a>
-                            </div>
-                        <% } %>
-                    </div>
-                    
-                    <!-- Input Hidden ID -->
-                    <% if (demanda && demanda.id) { %> 
-                        <input type="hidden" name="id" value="<%= demanda.id %>"> 
-                    <% } %>
-                    
-                    <!-- Botão Salvar -->
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+          <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">Cadastro de Demandas</h2>
+          </div>
+          <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" <% if (demanda && demanda.id) { %>
+                action="/update/<%= demanda.id %>"
+              <% } else { %>
+                action="/save/"
+              <% } %> >
 
-    <%- include('../partials/footer.ejs') %>
+              <!-- Nome da Demanda -->
+              <div class="mb-3">
+                <label for="nome" class="form-label">Nome da Demanda</label>
+                <input type="text" class="form-control" id="nome" name="nome"
+                  placeholder="Digite a demanda..." <% if (demanda) { %>
+                  value="<%= demanda.nome %>" <% } %> required>
+              </div>
+
+              <!-- Upload de Arquivo -->
+              <div class="mb-3">
+                <label for="file" class="form-label">Upload de Arquivos</label>
+                <input type="file" class="form-control" id="file" name="files" multiple>
+
+                <% if (files && files.length > 0) { %>
+                  <div class="mt-2">
+                    <% files.forEach(file => { %>
+                      <div class="d-flex align-items-center gap-2">
+                        <a href="/<%= file.path %>" target="_blank" class="btn btn-outline-success btn-sm">
+                          Ver <%= file.name %>
+                        </a>
+                        <a href="/deleteUpload/<%= file.id %>" class="btn btn-outline-danger btn-sm">
+                          Excluir
+                        </a>
+                      </div>
+                    <% }) %>
+                  </div>
+                <% } %>
+              </div>
+
+              <!-- Input Hidden ID -->
+              <% if (demanda && demanda.id) { %>
+                <input type="hidden" name="id" value="<%= demanda.id %>">
+              <% } %>
+
+              <!-- Botão Salvar -->
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-success">Salvar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>

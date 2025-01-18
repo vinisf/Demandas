@@ -1,0 +1,52 @@
+<%- include('../partials/header.ejs') %>
+    <%- include('../partials/navbar.ejs') %>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Incluir Sidebar Externo -->
+                <%- include('../partials/sidebar.ejs') %>
+
+                    <!-- Conteúdo Principal -->
+                    <div class="col-md-10 offset-md-2 p-4" id="main-content">
+                        <div class="container mt-4">
+                            <div class="table-responsive">
+
+                                <table id="tabela-demandas" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Nome</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% demandas.forEach(demanda=> { %>
+                                            <tr>
+                                                <th scope="row">
+                                                    <%= demanda.id %>
+                                                </th>
+                                                <td>
+                                                    <%= demanda.nome %>
+                                                </td>
+                                                <td>
+                                                    <% const status=statusLabels[demanda.status]; %>
+                                                        <span class="badge <%= status.class %>">
+                                                            <%= status.text %>
+                                                        </span>
+                                                </td>
+                                                <td>
+                                                    <a href="/demandas/<%= demanda.id %>"
+                                                        class="btn btn-info btn-sm">Visualizar</a>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <%- include('../partials/footer.ejs') %>

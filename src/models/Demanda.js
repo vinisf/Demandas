@@ -1,4 +1,7 @@
 const knex = require("../config/database");
+const fs = require('fs');
+var path = require('path')
+
 
 class Demanda {
   async getAll() {
@@ -13,9 +16,15 @@ class Demanda {
 
   async create(demanda) {
     try {
-      await knex.insert(demanda).table("demandas");
+      // Insere a demanda e retorna o resultado
+      const result = await knex("demandas").insert(demanda).returning("id");
+      console.log("Demanda criada com sucesso!");
+
+      // Retorna o ID da demanda criada
+      return result[0]; // O resultado é um array, então pegamos o primeiro item
     } catch (err) {
-      console.log(err);
+      console.log("Erro ao criar demanda:", err);
+      throw err; // Lança o erro para ser tratado no controller
     }
   }
 
@@ -57,7 +66,10 @@ class Demanda {
     var editDemanda = await this.findById(id);
     if (editDemanda != undefined) {
       try {
-        await knex.update({ status: status, responsavel: usuarioId }).where({ id: id }).table("demandas");
+        await knex
+          .update({ status: status, responsavel: usuarioId })
+          .where({ id: id })
+          .table("demandas");
         return { status: true };
       } catch (err) {
         return { status: false, err: err };
@@ -79,6 +91,56 @@ class Demanda {
       }
     } else {
       return { status: false, err: "A demanda não existe!" };
+    }
+  }
+
+  async getFilesByDemandaId(demandaId) {
+    try {
+      // Busca os arquivos associados a uma demanda
+      var result = await knex("uploads").where({ demanda_id: demandaId });
+      return result;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
+  async deleteFileById(fileId) {
+    try {
+      // Busca o arquivo pelo ID
+      const file = await knex("uploads").where({ id: fileId }).first();
+      if (!file) {
+        throw new Error("Arquivo não encontrado");
+      }
+
+      // Deleta o arquivo fisicamente do sistema
+      await fs.promises.unlink(path.join(__dirname, "..", file.path));
+
+      // Deleta o arquivo da tabela 'uploads'
+      await knex("uploads").where({ id: fileId }).del();
+
+      return file;
+    } catch (err) {
+      console.log(err);
+      throw new Error("Erro ao deletar o arquivo");
+    }
+  }
+
+  async updateDemandaFile(demandaId) {
+    try {
+      // Encontra a demanda
+      const demanda = await this.findById(demandaId);
+      if (demanda) {
+        // Atualiza a demanda, removendo o campo 'file'
+        demanda.file = null;
+        await knex("demandas").update(demanda).where({ id: demandaId });
+        return demanda;
+      } else {
+        throw new Error("Demanda não encontrada");
+      }
+    } catch (err) {
+      console.log(err);
+      throw new Error("Erro ao atualizar a demanda");
     }
   }
 }
