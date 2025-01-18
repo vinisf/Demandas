@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 
-// Looking to send emails in production? Check out our Email API/SMTP product!
 var transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,

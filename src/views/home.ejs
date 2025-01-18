@@ -51,10 +51,9 @@
                                                             <button type="submit"
                                                                 class="btn btn-danger btn-sm">Deletar</button>
                                                         </form>
-                                                        <% if (demanda.file) { %>
-                                                            <a href="<%= demanda.file %>" class="btn btn-success btn-sm"
-                                                                target="_blank">Ver Upload</a>
-                                                            <% } %>
+
+                                                        <a href="/demandas/<%= demanda.id %>"
+                                                            class="btn btn-info btn-sm">Visualizar</a>
                                                     </div>
                                                 </td>
                                             </tr>

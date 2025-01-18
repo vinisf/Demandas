@@ -3,8 +3,6 @@ var path = require('path')
 
 const fs = require('fs');
 
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         var dir = "upload/"+ req.session.user.id;

@@ -23,6 +23,7 @@ class DemandaController {
     var demanda = { file: undefined, id: undefined };
 
     res.render("demanda/create", {
+      files: null,
       demanda,
       messages: {
         success: req.flash("success"), // As mensagens de sucesso são passadas como arrays
