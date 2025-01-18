@@ -1,6 +1,8 @@
 var express = require('express')
 var router = require('./routes/routes')
 var bodyParser = require('body-parser')
+var path = require('path')
+
 
 
 require('dotenv').config();
